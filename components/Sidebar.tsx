@@ -4,8 +4,7 @@ import { Home, Plus, Settings } from "lucide-react";
 import React from "react";
 
 import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -39,7 +38,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="space-y-4 flex flex-col h-full text-primary bg-secondary">
+    <div className="space-y-4  flex flex-col h-full text-primary bg-secondary ">
       <div className="p-3 flex flex-1 justify-center ">
         <div className="space-y-2">
           {routes.map((route) => (
