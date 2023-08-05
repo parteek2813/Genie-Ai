@@ -72,7 +72,7 @@ export default function CompanionForm({
         >
           <div className="space-y-2 w-full ">
             <div>
-              <h3 className="text-lg font-medium">General INformation</h3>
+              <h3 className="text-lg font-medium">General Information</h3>
               <p className="text-sm text-muted-foreground">
                 General Info about ur companion
               </p>
