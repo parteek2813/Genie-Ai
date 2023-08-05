@@ -17,14 +17,14 @@ const CompanionId = async ({ params }: CompanionIdPageProps) => {
     },
   });
 
-  const category = await prismadb.category.findMany({
+  const categories = await prismadb.category.findMany({
     where: {
       id: params.companionId,
     },
   });
   return (
     <>
-      <CompanionForm initialData={companion} categories={Categories} />
+      <CompanionForm initialData={companion} categories={categories} />
     </>
   );
 };
