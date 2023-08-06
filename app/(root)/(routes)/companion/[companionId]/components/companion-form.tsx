@@ -18,6 +18,13 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ImageUpload } from "@/components/image-upload";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CompanionFormProps {
   initialData: Companion | null;
@@ -109,7 +116,7 @@ export default function CompanionForm({
                   <FormControl>
                     <Input
                       disabled={isLoading}
-                      placeholder="Code Cartoon"
+                      placeholder="Elon Musk"
                       {...field}
                     />
                   </FormControl>
@@ -129,7 +136,7 @@ export default function CompanionForm({
                   <FormControl>
                     <Input
                       disabled={isLoading}
-                      placeholder="A coding cartoon in dark light"
+                      placeholder="CEO & founder of tesla, SpaceX"
                       {...field}
                     />
                   </FormControl>
@@ -137,6 +144,42 @@ export default function CompanionForm({
                     Short descriotion for your AI Companion
                   </FormDescription>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              name="categoryId"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    disabled={isLoading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="bg-background">
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a category"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormDescription>
+                    Select a category for your AI
+                  </FormDescription>
                 </FormItem>
               )}
             />
