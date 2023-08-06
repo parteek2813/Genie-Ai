@@ -8,6 +8,12 @@ export async function PATCH(
   { params }: { params: { companionId: string } }
 ) {
   try {
+    if (
+      !req.headers.has("Content-Length") ||
+      req.headers.get("content-type") !== "application/json"
+    ) {
+      return new NextResponse("Invalid JSON data", { status: 400 });
+    }
     const body = await req.json();
     const user = await currentUser();
     const { src, name, description, instructions, seed, categoryId } = body;

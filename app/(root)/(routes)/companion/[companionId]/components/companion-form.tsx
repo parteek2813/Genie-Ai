@@ -106,8 +106,8 @@ export default function CompanionForm({
       }
 
       toast({
-        variant: "destructive",
-        description: "Success",
+        description: "Success.",
+        duration: 3000,
       });
 
       router.refresh();
