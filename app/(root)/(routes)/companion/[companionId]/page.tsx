@@ -19,13 +19,18 @@ const CompanionId = async ({ params }: CompanionIdPageProps) => {
 
   const categories = await prismadb.category.findMany();
 
-  console.log(categories);
-  console.log(companion);
   return (
     <>
       <CompanionForm initialData={companion} categories={categories} />
     </>
   );
 };
+
+// Flow:
+// Fetched the companions and categories from the prisma db and
+// then passed into the companionForm component
+// This companion form component uses this category array and map
+// over to give the select a category features in the create companion
+// page altogether
 
 export default CompanionId;
