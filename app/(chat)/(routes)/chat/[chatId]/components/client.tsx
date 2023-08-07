@@ -4,9 +4,11 @@ import { useCompletion } from "ai/react";
 import { ChatHeader } from "@/components/chat-header";
 import { Companion, Message } from "@prisma/client";
 import { useRouter } from "next/navigation";
+
 import { FormEvent, useState } from "react";
 import { ChatForm } from "@/components/chat-form";
 import { ChatMessages } from "@/components/chat-messages";
+import { ChatMessageProps } from "@/components/chat-message";
 
 interface ChatClientPageProps {
   companion: Companion & {
@@ -19,14 +21,16 @@ interface ChatClientPageProps {
 
 export const ChatClient = ({ companion }: ChatClientPageProps) => {
   const router = useRouter();
-  const [messages, setMessages] = useState<any[]>(companion.messages);
+  const [messages, setMessages] = useState<ChatMessageProps[]>(
+    companion.messages
+  );
 
   //   ai tool usage
   const { input, isLoading, handleInputChange, handleSubmit, setInput } =
     useCompletion({
       api: `/api/chat/${companion.id}`,
       onFinish(prompt, completion) {
-        const systemMessage = {
+        const systemMessage: ChatMessageProps = {
           role: "system",
           content: completion,
         };
@@ -40,7 +44,7 @@ export const ChatClient = ({ companion }: ChatClientPageProps) => {
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     // when we submit the form , we gonna create the user Message
-    const userMessage = {
+    const userMessage: ChatMessageProps = {
       role: "user",
       content: input,
     };
