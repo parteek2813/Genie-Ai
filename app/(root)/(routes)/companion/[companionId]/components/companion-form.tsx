@@ -99,7 +99,7 @@ export default function CompanionForm({
     try {
       if (initialData) {
         // for update companion functionality
-        await axios.patch(`/api/companion/${initialData.id}`);
+        await axios.patch(`/api/companion/${initialData.id}`, values);
       } else {
         // create companion functionality
         await axios.post("/api/companion", values);

@@ -1,6 +1,6 @@
 import prismadb from "@/lib/prismadb";
 
-import { currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -8,15 +8,12 @@ export async function PATCH(
   { params }: { params: { companionId: string } }
 ) {
   try {
-    if (
-      !req.headers.has("Content-Length") ||
-      req.headers.get("content-type") !== "application/json"
-    ) {
-      return new NextResponse("Invalid JSON data", { status: 400 });
-    }
+    console.log("reaching");
     const body = await req.json();
     const user = await currentUser();
     const { src, name, description, instructions, seed, categoryId } = body;
+
+    console.log("after the patch request");
 
     // check if we have the companionId in params or not
     if (!params.companionId) {
