@@ -36,7 +36,7 @@ export const Navbar = () => {
           Upgrade
           <Sparkle className="h-4 w-4 fill-white text-white ml-2" />
         </Button>
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
         <ModeToggle />
       </div>
     </div>
