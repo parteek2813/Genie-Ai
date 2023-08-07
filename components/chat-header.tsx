@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { Companion, Message } from "@prisma/client";
 import {
   ChevronLeft,
@@ -19,6 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
 
 interface ChatHeaderProps {
   companion: Companion & {
@@ -32,6 +34,26 @@ interface ChatHeaderProps {
 export const ChatHeader = ({ companion }: ChatHeaderProps) => {
   const router = useRouter();
   const { user } = useUser();
+  const { toast } = useToast();
+
+  // onDelete function which invoked when the chat is deleted
+  const onDelete = async () => {
+    try {
+      await axios.delete(`/api/companion/${companion.id}`);
+
+      toast({
+        description: "Success",
+      });
+
+      router.refresh();
+      router.push("/");
+    } catch (error) {
+      toast({
+        description: "Something went wrong",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="flex w-full justify-between items-center border-b border-primary/10 pb-4">
@@ -75,7 +97,7 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={onDelete}>
               <Trash className="w-4 h-4 mr-2" />
               Delete
             </DropdownMenuItem>
