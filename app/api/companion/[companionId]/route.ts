@@ -8,12 +8,9 @@ export async function PATCH(
   { params }: { params: { companionId: string } }
 ) {
   try {
-    console.log("reaching");
     const body = await req.json();
     const user = await currentUser();
     const { src, name, description, instructions, seed, categoryId } = body;
-
-    console.log("after the patch request");
 
     // check if we have the companionId in params or not
     if (!params.companionId) {
