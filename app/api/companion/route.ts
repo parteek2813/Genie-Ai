@@ -1,4 +1,5 @@
 import prismadb from "@/lib/prismadb";
+import { checkSubscription } from "@/lib/subscription";
 
 import { currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
@@ -26,7 +27,11 @@ export async function POST(req: Request) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
-    // TODO: Check for subsription
+    const isPro = await checkSubscription();
+
+    if (!isPro) {
+      return new NextResponse("Pro Subscription required", { status: 403 });
+    }
 
     // if user is there and all fields are also present , then
     // just create a new companion in the prismaDb and then return it
