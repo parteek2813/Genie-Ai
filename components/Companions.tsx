@@ -61,7 +61,6 @@ export const Companions = ({ data }: CompanionProps) => {
           </Link>
         </Card>
       ))}
-      Companions
     </div>
   );
 };

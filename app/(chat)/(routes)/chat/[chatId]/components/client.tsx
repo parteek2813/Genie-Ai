@@ -1,16 +1,16 @@
 "use client";
 
 import { useCompletion } from "ai/react";
-import { ChatHeader } from "@/components/chat-header";
+import { FormEvent, useState } from "react";
 import { Companion, Message } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
-import { FormEvent, useState } from "react";
 import { ChatForm } from "@/components/chat-form";
+import { ChatHeader } from "@/components/chat-header";
 import { ChatMessages } from "@/components/chat-messages";
 import { ChatMessageProps } from "@/components/chat-message";
 
-interface ChatClientPageProps {
+interface ChatClientProps {
   companion: Companion & {
     messages: Message[];
     _count: {
@@ -19,17 +19,16 @@ interface ChatClientPageProps {
   };
 }
 
-export const ChatClient = ({ companion }: ChatClientPageProps) => {
+export const ChatClient = ({ companion }: ChatClientProps) => {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatMessageProps[]>(
     companion.messages
   );
 
-  //   ai tool usage
   const { input, isLoading, handleInputChange, handleSubmit, setInput } =
     useCompletion({
       api: `/api/chat/${companion.id}`,
-      onFinish(prompt, completion) {
+      onFinish(_prompt, completion) {
         const systemMessage: ChatMessageProps = {
           role: "system",
           content: completion,
@@ -43,13 +42,11 @@ export const ChatClient = ({ companion }: ChatClientPageProps) => {
     });
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    // when we submit the form , we gonna create the user Message
     const userMessage: ChatMessageProps = {
       role: "user",
       content: input,
     };
 
-    // new message state updated with userMessage
     setMessages((current) => [...current, userMessage]);
 
     handleSubmit(e);
