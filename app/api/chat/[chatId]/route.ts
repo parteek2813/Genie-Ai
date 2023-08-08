@@ -33,7 +33,6 @@ export async function POST(
     const companion = await prismadb.companion.update({
       where: {
         id: params.chatId,
-        userId: user.id,
       },
       data: {
         messages: {
@@ -59,6 +58,104 @@ export async function POST(
       userId: user.id,
       modelName: "llama2-13b",
     };
+
+    const memoryManager = await MemoryManager.getInstance();
+
+    // check if any memory for this companion already exists
+    const records = await memoryManager.readLatestHistory(companionKey);
+
+    if (records.length === 0) {
+      await memoryManager.seedChatHistory(companion.seed, "\n\n", companionKey);
+    }
+    await memoryManager.writeToHistory("User: " + prompt + "\n", companionKey);
+
+    // query pinecone
+
+    const recentChatHistory = await memoryManager.readLatestHistory(
+      companionKey
+    );
+
+    // get the similar docs here
+    const similarDocs = await memoryManager.vectorSearch(
+      recentChatHistory,
+      companion_file_name
+    );
+
+    let relevantHistory = "";
+
+    // add the relavant history
+    if (!!similarDocs && similarDocs.length !== 0) {
+      relevantHistory = similarDocs.map((doc) => doc.pageContent).join("\n");
+    }
+
+    const { handlers } = LangChainStream();
+
+    // call the replicate model
+    const model = new Replicate({
+      model:
+        "a16z-infra/llama-2-13b-chat:df7690f1994d94e96ad9d568eac121aecf50684a0b0963b25a41cc40061269e5",
+      input: {
+        max_length: 2048,
+      },
+      apiKey: process.env.REPLICATE_API_TOKEN,
+      callbackManager: CallbackManager.fromHandlers(handlers),
+    });
+
+    // Turn verbose on for debugging
+    model.verbose = true;
+
+    const resp = String(
+      await model
+        .call(
+          `
+          ONLY generate plain sentences without prefix of who is speaking. DO NOT use ${companion.name}: prefix. 
+  
+          ${companion.instructions}
+  
+          Below are relevant details about ${companion.name}'s past and the conversation you are in.
+          ${relevantHistory}
+  
+  
+          ${recentChatHistory}\n${companion.name}:`
+        )
+        .catch(console.error)
+    );
+
+    // cleaning of the things starting out
+    const cleaned = resp.replaceAll(",", ""); // replace all commas with empty string
+    const chunks = cleaned.split("\n");
+    const response = chunks[0];
+
+    /// write to history too
+    await memoryManager.writeToHistory("" + response.trim(), companionKey);
+
+    var Readable = require("stream").Readable;
+
+    // push new Readable
+    let s = new Readable();
+    s.push(response);
+    s.push(null);
+
+    if (response !== undefined && response.length > 1) {
+      memoryManager.writeToHistory("" + response.trim(), companionKey);
+
+      await prismadb.companion.update({
+        where: {
+          id: params.chatId,
+        },
+        data: {
+          messages: {
+            create: {
+              content: response.trim(),
+              role: "system",
+              userId: user.id,
+            },
+          },
+        },
+      });
+    }
+
+    return new StreamingTextResponse(s);
   } catch (error) {
     console.log("[CHAT_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
