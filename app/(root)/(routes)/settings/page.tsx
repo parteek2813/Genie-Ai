@@ -25,33 +25,37 @@ const SettingsPage = async () => {
 
       <SubscriptionButton isPro={isPro} />
 
-      <Table className=" mt-[368px]">
-        <TableCaption>Dummy Details to get your subscription.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[250px]">Card Number</TableHead>
-            <TableHead>Expiry</TableHead>
-            <TableHead>CVC</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Country</TableHead>
-            <TableHead>Address Line 1 & 2</TableHead>
-            <TableHead>City</TableHead>
-            <TableHead>State</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell className="font-medium">4242-4242-4242-4242</TableCell>
-            <TableCell>05/55</TableCell>
-            <TableCell>555</TableCell>
-            <TableCell>[Any random]</TableCell>
-            <TableCell>United States</TableCell>
-            <TableCell>Address</TableCell>
-            <TableCell>City</TableCell>
-            <TableCell>California</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      {!isPro && (
+        <Table className=" mt-[368px]">
+          <TableCaption>Dummy Details to get your subscription.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[250px]">Card Number</TableHead>
+              <TableHead>Expiry</TableHead>
+              <TableHead>CVC</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Country</TableHead>
+              <TableHead>Address Line 1 & 2</TableHead>
+              <TableHead>City</TableHead>
+              <TableHead>State</TableHead>
+              <TableHead>Pincode</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium">4242-4242-4242-4242</TableCell>
+              <TableCell>05/55</TableCell>
+              <TableCell>555</TableCell>
+              <TableCell>[Any random]</TableCell>
+              <TableCell>United States</TableCell>
+              <TableCell>Address</TableCell>
+              <TableCell>City</TableCell>
+              <TableCell>California</TableCell>
+              <TableCell>123456</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 };
