@@ -20,7 +20,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
 interface ChatHeaderProps {
   companion: Companion & {
@@ -35,6 +46,7 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
   const router = useRouter();
   const { user } = useUser();
   const { toast } = useToast();
+  const [openDialog, setOpenDialog] = useState(false);
 
   // onDelete function which invoked when the chat is deleted
   const onDelete = async () => {
@@ -97,13 +109,32 @@ export const ChatHeader = ({ companion }: ChatHeaderProps) => {
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onDelete}>
+            <DropdownMenuItem onClick={() => setOpenDialog(!openDialog)}>
               <Trash className="w-4 h-4 mr-2" />
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+
+      {/* Are you sure button */}
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+
+            <DialogDescription>
+              This action cannot be undone. Are you sure you want to permanently
+              delete this genie from our servers?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="submit" onClick={onDelete}>
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
