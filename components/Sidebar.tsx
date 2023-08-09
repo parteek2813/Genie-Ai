@@ -6,6 +6,12 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
 import { useProModal } from "@/Hooks/use-pro-modal";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface SideBarProp {
   isPro: boolean;
@@ -59,7 +65,14 @@ export default function Sidebar({ isPro }: SideBarProp) {
               )}
             >
               <div className="flex flex-col gap-y-2 items-center flex-1">
-                <route.icon className="h-5 w-5" />
+                <TooltipProvider key={route.href}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <route.icon className="h-5 w-5" />
+                    </TooltipTrigger>
+                    <TooltipContent>{route.label}</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
                 {route.label}
               </div>
             </div>

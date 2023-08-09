@@ -10,6 +10,12 @@ import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
 import MobileSidebar from "./MobileSidebar";
 import { useProModal } from "@/Hooks/use-pro-modal";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const font = Poppins({
   weight: "600",
@@ -46,7 +52,14 @@ export const Navbar = ({ isPro }: NavBarProps) => {
           </Button>
         )}
         <UserButton afterSignOutUrl="/" />
-        <ModeToggle />
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <ModeToggle />
+            </TooltipTrigger>
+            <TooltipContent>Mode</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );
