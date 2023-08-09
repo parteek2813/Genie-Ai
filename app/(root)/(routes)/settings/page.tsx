@@ -26,7 +26,7 @@ const SettingsPage = async () => {
       <SubscriptionButton isPro={isPro} />
 
       {!isPro && (
-        <Table className=" mt-[368px]">
+        <Table className=" mt-[328px]">
           <TableCaption>Dummy Details to get your subscription.</TableCaption>
           <TableHeader>
             <TableRow>
