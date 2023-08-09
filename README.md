@@ -1,4 +1,4 @@
-# SaaS AI Companion - Genie.AI built techs like Next.js 13, React, Tailwind, Prisma, Stripe
+# SaaS AI Companion - Genie.AI built with Next.js 13, React, Tailwind, Prisma, Stripe
 
 This is a repository for an AI Platform - Genie.AI with Next.js 13, React, Tailwind, Prisma, Stripe
 
